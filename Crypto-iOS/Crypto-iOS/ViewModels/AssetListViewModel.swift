@@ -1,4 +1,5 @@
 import Foundation
+import Dependencies
 
 @Observable
 final class AssetListViewModel {
@@ -6,21 +7,41 @@ final class AssetListViewModel {
     var errorMessage: String?
     var assets: [Asset] = []
     
+    @ObservationIgnored
+    @Dependency(\.assetsApiClient) var apiClient
+    
+    var clientConfigured = false
+    
+    func configClient() {
+        clientConfigured = true
+    }
+    
     func fetchAssets() async {
-        let urlSession = URLSession.shared
-        //una forma de traer variables opcionales que pueden o no existir
-        guard let url = URL(string: "https://rest.coincap.io/v3/assets?apiKey=5afe9a3cc58cd3026d29a4dd7cec05ef0e1cef5a50072b547d8bcd62785ab287") else {
-            errorMessage = "Invalid URL"
-            return
-        }
-        
         do {
-            let (data, _) = try await urlSession.data(for: URLRequest(url: url))
-            let assetsResponse = try JSONDecoder().decode(AssetsResponse.self, from: data)
-            self.assets = assetsResponse.data
+            assets = try await apiClient.fetchAllAssets()
+        } catch let error as NetworkingError {
+            errorMessage = error.localizedDescription
         } catch {
-            print(error.localizedDescription)
             errorMessage = error.localizedDescription
         }
     }
 }
+
+//
+//final class AAViewModel: ObservableObject {
+//    
+//    @Published var assets: [Asset] = []
+//    @Published var errorMessage: String?
+//    
+//    var apiClient: AssetsApiClient
+//    
+//    init(assets: [Asset], errorMessage: String? = nil, apiClient: AssetsApiClient) {
+//        self.assets = assets
+//        self.errorMessage = errorMessage
+//        self.apiClient = apiClient
+//    }
+//    
+//    func fetchAssets() async {
+//        
+//    }
+//}

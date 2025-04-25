@@ -25,7 +25,7 @@ extension AssetsApiClient: DependencyKey {
     static var liveValue: AssetsApiClient {
         let db = Firestore.firestore().collection("favourites")
         let urlSession = URLSession.shared
-        let apiKey = "5afe9a3cc58cd3026d29a4dd7cec05ef0e1cef5a50072b547d8bcd62785ab287"
+        let apiKey = ""
         let baseUrl = "https://rest.coincap.io/v3"
         
         return .init(

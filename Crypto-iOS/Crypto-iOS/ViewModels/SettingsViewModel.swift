@@ -1,36 +1,22 @@
 import Foundation
-import FirebaseAuth
+import Dependencies
 
 @Observable
 final class SettingsViewModel {
+    @ObservationIgnored
+    @Dependency(\.authClient) var authClient
     var email: String = ""
     var password: String = ""
     var showError = false
     var errorMessage: String = ""
     var user: User?
     init() {
-        guard let currentUser = Auth.auth().currentUser else {
-            return
-        }
-        user = .init(
-            id: currentUser.uid,
-            email: currentUser.email ?? "n/a"
-            
-        )
+        user = try? authClient.getCurrentUser()
     }
     
     func login() async {
         do {
-            let result = try await Auth.auth().signIn(
-                withEmail: email,
-                password: password
-            )
-            
-            user = .init(
-                id: result.user.uid,
-                email: result.user.email ?? "n/a"
-            )
-            
+            user = try await authClient.signIn(email, password)
             email = ""
             password = ""
         } catch {
@@ -41,10 +27,11 @@ final class SettingsViewModel {
     
     func logout() {
         do {
-            try Auth.auth().signOut()
+            try authClient.signOut()
             user = nil
         } catch {
-            // TODO: handle error
+            showError = true
+            errorMessage = error.localizedDescription
         }
     }
 }

@@ -1,35 +1,33 @@
 import Foundation
 import FirebaseAuth
 import FirebaseFirestore
+import Dependencies
 
 @Observable
 final class AssetDetailsViewModel {
     let asset: Asset
     var errorMessage: String = ""
     var showError: Bool = false
+    @ObservationIgnored
+       @Dependency(\.assetsApiClient) var apiClient
+
+       @ObservationIgnored
+       @Dependency(\.authClient) var authClient
 
     init(asset: Asset) {
         self.asset = asset
     }
 
-    func addFavourites() {
-        guard let user = Auth.auth().currentUser else {
-            errorMessage = "Usuario no Autenticado"
+    func addToFavourites() async {
+           do {
+               let user = try authClient.getCurrentUser()
+               try await apiClient.saveFavourite(user, asset)
+           } catch let error as AuthError {
+               errorMessage = error.localizedDescription
             showError = true
             return
-        }
-
-        let userId = user.uid
-        let db = Firestore.firestore()
-        
-        db.collection("favourites").document(userId).setData(
-            ["favourites": FieldValue.arrayUnion([asset.id])],
-            merge: true
-        ) { error in
-            if let error = error {
-                self.errorMessage = "Error al agregar favorito: \(error.localizedDescription)"
-                self.showError = true
-            }
+           } catch {
+                      // TODO: Handle error
         }
     }
 }

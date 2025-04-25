@@ -242,6 +242,7 @@
 			packageReferences = (
 				9EE953EF2DA9F4DA00566F89 /* XCRemoteSwiftPackageReference "swift-dependencies" */,
 				CB9928E02DB9AEEA00CD492D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				CBA0D5AC2DBB1462002CAFCD /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 9E75DD932DA9E36000BDAB9E /* Products */;
@@ -622,6 +623,14 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 11.12.0;
+			};
+		};
+		CBA0D5AC2DBB1462002CAFCD /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.19.1;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

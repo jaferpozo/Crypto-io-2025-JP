@@ -7,7 +7,9 @@ struct AssetDeatailView:View {
         VStack {
                     Text(viewModel.asset.name)
                     Button {
-                        viewModel.addFavourites()
+                        Task {
+                            await viewModel.addToFavourites()
+                        }
                     } label: {
                         Text("Add to favourites")
                     }

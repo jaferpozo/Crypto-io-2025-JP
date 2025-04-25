@@ -1,9 +1,4 @@
-//
-//  Crypto_iOSTests.swift
-//  Crypto-iOSTests
-//
-//  Created by Sebastian on 12/04/2025.
-//
+
 
 import Testing
 @testable import Crypto_iOS
